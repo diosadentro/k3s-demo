@@ -1,0 +1,35 @@
+# Ingress in Kubernetes manages external access to services.
+# It provides:
+# - HTTP/HTTPS routing rules
+# - SSL/TLS termination
+# - Name-based virtual hosting
+#
+# This ingress:
+# - Routes traffic from nginx.local to the nginx service
+# - Uses Traefik as the ingress controller (default in K3s)
+# - Provides external access to the Nginx application
+#
+# Key components:
+# - spec.rules: Defines routing rules based on host/path
+# - spec.rules[].http.paths: Maps paths to services
+# - spec.rules[].host: The domain name to match
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx
+  namespace: nginx-demo
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  rules:
+  - host: nginx.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx
+            port:
+              number: 80 

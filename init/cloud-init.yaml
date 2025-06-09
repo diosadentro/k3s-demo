@@ -1,0 +1,63 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+packages:
+  - curl
+  - jq
+runcmd:
+  - curl -sfL https://get.k3s.io | sh -
+  - ln -s /usr/local/bin/kubectl /usr/bin/kubectl || true
+  - mkdir -p /home/ubuntu/.kube
+  - chmod 644 /etc/rancher/k3s/k3s.yaml
+  - cp /etc/rancher/k3s/k3s.yaml /home/ubuntu/.kube/config
+  - chown ubuntu:ubuntu /home/ubuntu/.kube/config
+  - kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+  - |
+    cat <<EOF > /home/ubuntu/dashboard-admin.yaml
+    apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: admin-user
+      namespace: kubernetes-dashboard
+    ---
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: admin-user
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: cluster-admin
+    subjects:
+    - kind: ServiceAccount
+      name: admin-user
+      namespace: kubernetes-dashboard
+    EOF
+  - kubectl apply -f /home/ubuntu/dashboard-admin.yaml
+  - chown ubuntu:ubuntu /home/ubuntu/dashboard-admin.yaml
+  - |
+    cat <<EOF > /home/ubuntu/dashboard-nodeport.yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: kubernetes-dashboard-nodeport
+      namespace: kubernetes-dashboard
+    spec:
+      type: NodePort
+      ports:
+        - port: 443
+          targetPort: 8443
+          nodePort: 30443
+      selector:
+        k8s-app: kubernetes-dashboard
+    EOF
+  - kubectl apply -f /home/ubuntu/dashboard-nodeport.yaml
+  - chown ubuntu:ubuntu /home/ubuntu/dashboard-nodeport.yaml
+  - |
+    cat <<EOF > /home/ubuntu/start-dashboard.sh
+    #!/bin/bash
+    nohup kubectl port-forward -n kubernetes-dashboard service/kubernetes-dashboard 8443:443 > /home/ubuntu/dashboard.log 2>&1 &
+    EOF
+  - chmod +x /home/ubuntu/start-dashboard.sh
+  - chown ubuntu:ubuntu /home/ubuntu/start-dashboard.sh
+  - su - ubuntu -c "/home/ubuntu/start-dashboard.sh"

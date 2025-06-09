@@ -1,0 +1,75 @@
+# Deployments in Kubernetes manage the desired state for your application.
+# They provide:
+# - Declarative updates for Pods and ReplicaSets
+# - Rolling updates and rollbacks
+# - Scaling and self-healing capabilities
+#
+# This deployment:
+# - Runs 2 replicas of Nginx for high availability
+# - Uses resource limits to prevent resource exhaustion
+# - Includes health checks (liveness and readiness probes)
+# - Mounts a ConfigMap for the index.html content
+# - Mounts a Secret for sensitive content
+#
+# Key components:
+# - spec.replicas: Number of identical pods to run
+# - spec.selector: How the deployment finds pods to manage
+# - spec.template: The pod template to create
+# - volumeMounts: Mounts the ConfigMap and Secret as files
+# - volumes: Defines the ConfigMap and Secret volumes
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: nginx-demo
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.25
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        volumeMounts:
+        - name: nginx-index
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
+        - name: nginx-secrets
+          mountPath: /usr/share/nginx/html/secrets.html
+          subPath: secrets.html
+      volumes:
+      - name: nginx-index
+        configMap:
+          name: nginx-index
+      - name: nginx-secrets
+        secret:
+          secretName: nginx-secrets 

@@ -1,0 +1,32 @@
+# Services in Kubernetes provide stable network endpoints for pods.
+# They enable:
+# - Service discovery within the cluster
+# - Load balancing across multiple pods
+# - Decoupling of frontend and backend services
+#
+# This service:
+# - Exposes the Nginx deployment on port 80
+# - Uses ClusterIP type (default) for internal cluster access
+# - Selects pods using the 'app: nginx' label
+#
+# Key components:
+# - spec.selector: Matches pods to expose (must match pod labels)
+# - spec.ports: Defines the ports to expose
+# - spec.type: ClusterIP (internal), NodePort, or LoadBalancer
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  namespace: nginx-demo
+  labels:
+    app: nginx
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: nginx 

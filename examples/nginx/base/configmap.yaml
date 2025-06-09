@@ -1,0 +1,69 @@
+# ConfigMaps in Kubernetes store non-confidential configuration data.
+# They are useful for:
+# - Storing configuration files
+# - Storing environment variables
+# - Separating configuration from container images
+#
+# This ConfigMap:
+# - Stores a custom index.html file for Nginx
+# - Demonstrates how to externalize web content
+# - Shows how to use ConfigMaps for static content
+#
+# Key components:
+# - data: Contains the actual configuration data
+# - metadata.name: Used to reference this ConfigMap
+# - The content is mounted as a file in the Nginx container
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-index
+  namespace: nginx-demo
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Welcome to Nginx on K3s!</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            }
+            .container {
+                text-align: center;
+                padding: 2rem;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                max-width: 600px;
+            }
+            h1 {
+                color: #2c3e50;
+                margin-bottom: 1rem;
+            }
+            p {
+                color: #34495e;
+                line-height: 1.6;
+            }
+            .logo {
+                max-width: 200px;
+                margin-bottom: 2rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <img src="https://nginx.org/img/nginx_logo.png" alt="Nginx Logo" class="logo">
+            <h1>Welcome to Nginx on K3s!</h1>
+            <p>This page is served by Nginx running in a Kubernetes cluster powered by K3s.</p>
+            <p>The content is managed through a Kubernetes ConfigMap, demonstrating how to externalize configuration in a cloud-native way.</p>
+        </div>
+    </body>
+    </html> 

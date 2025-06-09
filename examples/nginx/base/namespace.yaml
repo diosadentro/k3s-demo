@@ -1,0 +1,17 @@
+# Namespaces in Kubernetes provide a scope for names and help organize resources.
+# They are useful for:
+# - Separating resources between different teams or projects
+# - Managing access control and resource quotas
+# - Organizing resources in a logical way
+#
+# This namespace will contain all resources for our Nginx demo application.
+# It's a good practice to create a dedicated namespace for each application
+# rather than using the default namespace.
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nginx-demo
+  labels:
+    name: nginx-demo
+    environment: demo 
