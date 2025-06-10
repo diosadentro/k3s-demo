@@ -3,6 +3,8 @@ param(
     [switch]$Cleanup
 )
 
+$VMName = "k3s-demo"
+
 # Cleanup hosts file if requested
 if ($Cleanup) {
     Write-Host "Cleaning up hosts file..."
@@ -15,10 +17,10 @@ if ($Cleanup) {
     } else {
         Write-Host "No nginx.local entry found in hosts file"
     }
+    Write-Host "Cleaning up VM..."
+    multipass delete --purge $VMName
     exit 0
 }
-
-$VMName = "k3s-demo"
 
 Write-Host "Launching VM '$VMName'..."
 

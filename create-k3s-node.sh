@@ -4,6 +4,7 @@ set -e
 # Parse command line arguments
 UPDATE_HOSTS=false
 CLEANUP=false
+VM_NAME="k3s-demo"
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --update-hosts) UPDATE_HOSTS=true ;;
@@ -22,10 +23,10 @@ if [ "$CLEANUP" = true ]; then
     else
         echo "No nginx.local entry found in hosts file"
     fi
+    echo "Cleaning up VM..."
+    multipass delete --purge "$VM_NAME"
     exit 0
 fi
-
-VM_NAME="k3s-demo"
 
 echo "Launching VM '$VM_NAME'..."
 
