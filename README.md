@@ -169,43 +169,49 @@ Options:
 - ConfigMap / Secret (briefly): Externalize configuration
 
 ## Details
-- Cluster
--   A Kubernetes cluster is a group of machines (nodes) running Kubernetes.
--   Two main parts:
--     Control Plane: The "brains" (schedules workloads, manages desired state)
--     Worker Nodes: Where your apps actually run
-- Node
--   A node is a machine (physical or virtual) in the cluster.
--   It runs:
--     Kubelet: Talks to control plane
--     Container runtime: Like Docker, containerd
--     kube-proxy: Networking
-- Pod
--   The smallest unit in Kubernetes
--   A pod wraps 1 or more containers
--   Containers in a pod share:
--     Network (same IP)
--     Storage volumes
--   Think of it as a wrapper for containers
-- Deployment
--   A deployment describes how to manage pods:
--   How many replicas?
--   Which image?
--   Update strategy (rolling updates, etc.)
--   Can automatically recreate crashed pods
-- Service
--   A service exposes your pods to other pods or the internet
--   Types:
--     ClusterIP (internal only)
+### Cluster
+- A Kubernetes cluster is a group of machines (nodes) running Kubernetes.
+- Two main parts:
+-   Control Plane: The "brains" (schedules workloads, manages desired state)
+-   Worker Nodes: Where your apps actually run
+
+### Node
+- A node is a machine (physical or virtual) in the cluster.
+- It runs:
+-   Kubelet: Talks to control plane
+-   Container runtime: Like Docker, containerd
+-   kube-proxy: Networking
+
+### Pod
+- The smallest unit in Kubernetes
+- A pod wraps 1 or more containers
+- Containers in a pod share:
+-   Network (same IP)
+-   Storage volumes
+- Think of it as a wrapper for containers
+
+### Deployment
+- A deployment describes how to manage pods:
+- How many replicas?
+- Which image?
+- Update strategy (rolling updates, etc.)
+- Can automatically recreate crashed pods
+
+### Service
+- A service exposes your pods to other pods or the internet
+- Types:
+-   ClusterIP (internal only)
 -   NodePort (opens a port on each node)
--     LoadBalancer (works with cloud provider)
-- Namespace
--   Virtual clusters within a cluster
--   Useful for organizing environments (e.g., dev, prod, test)
-- ConfigMap / Secret
--   Store configuration outside the app
--   ConfigMap: plain text config
--   Secret: sensitive info (base64-encoded)
+-   LoadBalancer (works with cloud provider)
+
+### Namespace
+- Virtual clusters within a cluster
+- Useful for organizing environments (e.g., dev, prod, test)
+
+### ConfigMap / Secret
+- Store configuration outside the app
+- ConfigMap: plain text config
+- Secret: sensitive info (base64-encoded)
 
 ## How do we deploy apps
 - Resource files
