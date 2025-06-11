@@ -168,6 +168,10 @@ Options:
 - Namespace: Logical separation of resources
 - ConfigMap / Secret (briefly): Externalize configuration
 
+## Kubernetes Distributions
+<img width="942" alt="Screenshot 2025-06-11 at 4 53 09 PM" src="https://github.com/user-attachments/assets/52109adf-08f8-4a1c-b56c-c85f348d61a4" />
+
+
 ## Details
 ### Cluster
 - A Kubernetes cluster is a group of machines (nodes) running Kubernetes.
